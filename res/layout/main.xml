@@ -9,16 +9,23 @@
 		android:layout_height="fill_parent"
 		android:gravity="center"
 		android:orientation="vertical"
-		android:background="#314013">
+		android:background="#314013"
+		android:alpha="1">
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/hello"/>
 
+		<Button
+			android:layout_height="wrap_content"
+			android:text="let's test this stuff!"
+			android:layout_width="wrap_content"
+			android:id="@+id/btn"/>
+
 	</LinearLayout>
 
-	<LinearLayout
+	<FrameLayout
 		android:layout_height="100dp"
 		android:layout_width="match_parent"
 		android:orientation="vertical"
@@ -27,7 +34,8 @@
 
 		<ScrollView
 			android:layout_height="match_parent"
-			android:layout_width="match_parent">
+			android:layout_width="match_parent"
+			android:id="@+id/scroll">
 
 			<TextView
 				android:layout_width="match_parent"
@@ -38,7 +46,13 @@
 
 		</ScrollView>
 
-	</LinearLayout>
+		<ImageButton
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_gravity="top|right"
+			android:background="@drawable/av_pause_over_video"/>
+
+	</FrameLayout>
 
 </FrameLayout>
 
