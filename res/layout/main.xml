@@ -50,7 +50,15 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			android:layout_gravity="top|right"
-			android:background="@drawable/av_pause_over_video"/>
+			android:background="@drawable/av_pause_over_video"
+			android:id="@+id/pauseButton"	/>
+
+		<ImageButton
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_gravity="top|right"
+			android:background="@drawable/av_play_over_video"
+			android:id="@+id/playButton"/>
 
 	</FrameLayout>
 
