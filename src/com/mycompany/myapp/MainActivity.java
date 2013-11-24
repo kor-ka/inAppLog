@@ -13,14 +13,24 @@ public class MainActivity extends Activity implements OnClickListener
 
 Button btn;
 inAppLog ial;
+Thread one;
+Context ctx;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
 	{
         super.onCreate(savedInstanceState);
+		runOnUiThread(new Runnable(){
+
+				public void run()
+				{
         setContentView(R.layout.main);
 		btn = (Button) findViewById(R.id.btn);
+		
+		}
+		});
+		ctx = getBaseContext();
 		ial = new inAppLog(this);
 		btn.setOnClickListener(this);
     }
@@ -29,6 +39,5 @@ inAppLog ial;
 	public void onClick(View p1)
 	{
 	ial.writeLog("smth 2 log");
-	
 	}
 }
