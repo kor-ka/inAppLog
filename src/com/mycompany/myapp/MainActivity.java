@@ -39,5 +39,24 @@ Context ctx;
 	public void onClick(View p1)
 	{
 	ial.writeLog("smth 2 log");
+		new Thread(new Runnable() {
+				public void run() {
+					
+					do  {
+
+						try
+						{
+							//Toast.makeText(ctxx, "service running...", Toast.LENGTH_LONG).show();
+							ial.writeLog("fr th");
+							Thread.sleep(1000);
+							
+						}
+						catch (InterruptedException e)
+						{}
+
+					}while(true);
+
+				}
+			}).start();
 	}
 }

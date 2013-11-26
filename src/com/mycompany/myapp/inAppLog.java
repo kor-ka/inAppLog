@@ -10,7 +10,7 @@ import java.util.*;
 import android.view.ViewGroup.*;
 
 
-public class inAppLog implements OnClickListener
+public class inAppLog extends Thread implements OnClickListener
 {
 
 
@@ -29,6 +29,7 @@ public class inAppLog implements OnClickListener
 	Boolean playPause;
 	Context ctx;
 	LayoutParams params;
+
 	
 	public inAppLog(Activity act){
 		this.activity=act;
@@ -55,22 +56,29 @@ public class inAppLog implements OnClickListener
 		
 	}
 
-	public void writeLog(String str)
+	public void writeLog(final String str)
 	{
-		if (playPause)
-		{
-			time = sdf.format(new Date(System.currentTimeMillis()));
-			
-			inAppLog.setText(inAppLog.getText().toString() + "\n" + time + " | " + str);
-			scroll.post(new Runnable() {            
-					@Override
-					public void run()
+		this.activity.runOnUiThread(new Runnable(){
+				@Override
+				public void run()
+				{
+
+
+					if (playPause)
 					{
-						scroll.fullScroll(View.FOCUS_DOWN);              
+						time = sdf.format(new Date(System.currentTimeMillis()));
+
+						inAppLog.setText(inAppLog.getText().toString() + "\n" + time + " | " + str);
+						scroll.post(new Runnable() {            
+								@Override
+								public void run()
+								{
+									scroll.fullScroll(View.FOCUS_DOWN);              
+								}
+							});	
+						inAppLogSL.setText(time + " | " + str);	
 					}
-				});	
-			inAppLogSL.setText(time + " | " + str);	
-		}
+				}});
 	}
 	
 	@Override
