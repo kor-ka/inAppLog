@@ -8,6 +8,7 @@ import android.widget.*;
 import java.text.*;
 import java.util.*;
 import android.view.ViewGroup.*;
+import android.util.*;
 
 
 public class inAppLog extends Thread implements OnClickListener
@@ -29,6 +30,7 @@ public class inAppLog extends Thread implements OnClickListener
 	Boolean playPause;
 	Context ctx;
 	LayoutParams params;
+	private static final String TAG = "inAppLog";
 
 	
 	public inAppLog(Activity act){
@@ -78,6 +80,8 @@ public class inAppLog extends Thread implements OnClickListener
 							});	
 						inAppLogSL.setText(time + " | " + str);	
 					}
+					
+					Log.d(TAG, str);
 				}});
 	}
 	

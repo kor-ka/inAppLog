@@ -16,6 +16,7 @@ inAppLog ial;
 Thread one;
 Context ctx;
 
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
