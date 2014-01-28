@@ -17,7 +17,7 @@
                         <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Hi there! Now I wona b ur log!"
+                                android:text="Hi there! Now I wanna b your log!"
                                 android:textColor="#DBDBDB"
                                 android:id="@+id/inAppLogTV"/>
 
