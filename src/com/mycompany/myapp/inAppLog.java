@@ -1,5 +1,6 @@
-package com.mycompany.myapp;
+package utilities;
 
+import activities.ShowLogActivity;
 import android.app.*;
 import android.content.*;
 import android.view.*;
@@ -9,9 +10,12 @@ import android.widget.*;
 import java.text.*;
 import java.util.*;
 
+import wrappers.Data;
+
 import com.example.tabtest.R;
 
 import android.view.ViewGroup.*;
+import android.preference.PreferenceManager;
 import android.text.Layout;
 import android.util.*;
 
@@ -37,29 +41,48 @@ public class InAppLog extends Thread
 	static int actId=0;
 	static View ial;
 	static boolean afterClose;
+	private static String logBuffer;
+	private static Set<String> tagNoToShow;
 	
 	static LayoutParams params;
 	private static final String TAG = "inAppLog";
 
 	
 	public static void writeLog(Activity act, String tag, String str, boolean isLoggingOn){
+		
 		if(isLoggingOn)
 			writeLog(act, tag, str);
-		else
+		else{
 			close();
-		if(tag==null || tag.isEmpty())tag = TAG;
+			if(tag==null || tag.isEmpty())tag = TAG;
 			Log.d(tag, str);
+		}
+			
 	}
 
 	public static void close() {
 		afterClose = true;
 		if(ial!=null)
-		if((ViewGroup)ial.getParent()!=null)((ViewGroup)ial.getParent()).removeView(ial);		
+		if((ViewGroup)ial.getParent()!=null){
+			try{
+				((ViewGroup)ial.getParent()).removeView(ial);	
+			}catch(Exception e){
+				//oops
+			}
+					
+		}
 	}
+	
+	
 
 	public static void writeLog(Activity act, final String tag, final String str)
 	{
-		if (act!=null && str!=null ) {
+		
+		if(tagNoToShow==null) tagNoToShow  = new HashSet<String>();
+		boolean showThisTag = !tagNoToShow.contains(tag);
+		if(sdf==null)sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		if (act!=null && str!=null && showThisTag) {
 			if (act.hashCode() != actId || afterClose) {
 				afterClose=false;
 				actId = act.hashCode();
@@ -116,7 +139,7 @@ public class InAppLog extends Thread
 				}
 				if(ial==null){
 					ial = inflater.inflate(R.layout.inapploglay, null);
-					sdf = new SimpleDateFormat("HH:mm:ss");
+					
 					inAppLog = (TextView) ial.findViewById(R.id.inAppLogTV);
 					inAppLogSL = (TextView) ial.findViewById(R.id.inAppLogTVSL);
 					scroll = (ScrollView) ial.findViewById(R.id.scroll);
@@ -135,7 +158,13 @@ public class InAppLog extends Thread
 					playPause = true;
 					params = scroll.getLayoutParams();
 				}
-				if((ViewGroup)ial.getParent()!=null)((ViewGroup)ial.getParent()).removeView(ial);
+				if((ViewGroup)ial.getParent()!=null){
+					try{
+						((ViewGroup)ial.getParent()).removeView(ial);	
+					}catch(Exception e){
+						//oops
+					}
+				}
 				v.addView(ial, new LayoutParams(LayoutParams.MATCH_PARENT,
 						LayoutParams.WRAP_CONTENT));
 
@@ -153,6 +182,12 @@ public class InAppLog extends Thread
 						time = sdf.format(new Date(System.currentTimeMillis()));
 
 						String current = inAppLog.getText().toString();
+						
+						//Добавляем то, что не могли вывести
+						if(logBuffer!=null && !logBuffer.isEmpty()){
+							current.concat(logBuffer);
+							logBuffer = "";
+						}
 						if(current.length()>30000){
 							String toSet = current.substring(current.length() - 10000);
 							
@@ -168,13 +203,41 @@ public class InAppLog extends Thread
 							}
 						});
 						inAppLogSL.setText(time.concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
+					}else{
+						//Сохраняем то, что не можем вывести
+						time = sdf.format(new Date(System.currentTimeMillis()));
+						if(logBuffer==null || logBuffer.isEmpty()){
+							logBuffer =  new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);
+						}
+						else{
+							logBuffer.concat(new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));			
+						}
 					}
 
 					Log.d(tagToAdd, str);
 				}
 			});
+		}else if(str!=null){
+			String tagToAdd = tag;
+			if(tagToAdd==null || tagToAdd.isEmpty())tagToAdd = TAG;
+			
+			//Сохраняем то, что не можем вывести
+			time = sdf.format(new Date(System.currentTimeMillis()));
+			if(logBuffer==null || logBuffer.isEmpty()){
+				logBuffer =  new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);
+			}
+			else{
+				logBuffer.concat(new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));			
+			}
+			Log.d(tag, str);
 		}
 	}
 	
 		
+	public static void addOrRemoveTagNotToShow(String tag, boolean addOrRemove){
+		if(tagNoToShow==null) tagNoToShow  = new HashSet<String>(); 
+		if(addOrRemove)tagNoToShow.add(tag);
+		else tagNoToShow.remove(tag);
+	}
+	
 }
