@@ -1,6 +1,5 @@
-package utilities;
+package ru.korink.inapplog;
 
-import activities.ShowLogActivity;
 import android.app.*;
 import android.content.*;
 import android.view.*;
@@ -10,13 +9,9 @@ import android.widget.*;
 import java.text.*;
 import java.util.*;
 
-import wrappers.Data;
-
-import com.example.tabtest.R;
+import ru.korink.inapplog.R;
 
 import android.view.ViewGroup.*;
-import android.preference.PreferenceManager;
-import android.text.Layout;
 import android.util.*;
 
 
@@ -95,44 +90,34 @@ public class InAppLog extends Thread
 
 						@Override
 						public void onClick(View p1) {
-							switch (p1.getId()) {
-							case R.id.playButton:
-
-								play.setVisibility(play.GONE);
-								pause.setVisibility(pause.VISIBLE);
+							int id = p1.getId();
+							if (id == R.id.playButton) {
+								play.setVisibility(View.GONE);
+								pause.setVisibility(View.VISIBLE);
 								playPause = true;
-								break;
-
-							case R.id.pauseButton:
-
-								pause.setVisibility(pause.GONE);
-								play.setVisibility(play.VISIBLE);
+							} else if (id == R.id.pauseButton) {
+								pause.setVisibility(View.GONE);
+								play.setVisibility(View.VISIBLE);
 								playPause = false;
-								break;
-
-							case R.id.collapse:
+							} else if (id == R.id.collapse) {
 								//	params.height=40;
-								scroll.setVisibility(scroll.GONE);
-								collapse.setVisibility(collapse.GONE);
-								play.setVisibility(play.GONE);
-								pause.setVisibility(pause.GONE);
-								expand.setVisibility(expand.VISIBLE);
-								inAppLogSL.setVisibility(inAppLogSL.VISIBLE);
-								break;
-
-							case R.id.expand:
+								scroll.setVisibility(View.GONE);
+								collapse.setVisibility(View.GONE);
+								play.setVisibility(View.GONE);
+								pause.setVisibility(View.GONE);
+								expand.setVisibility(View.VISIBLE);
+								inAppLogSL.setVisibility(View.VISIBLE);
+							} else if (id == R.id.expand) {
 								//	params.height= 100;
-								scroll.setVisibility(scroll.VISIBLE);
-								collapse.setVisibility(collapse.VISIBLE);
+								scroll.setVisibility(View.VISIBLE);
+								collapse.setVisibility(View.VISIBLE);
 								if (playPause) {
-									pause.setVisibility(pause.VISIBLE);
+									pause.setVisibility(View.VISIBLE);
 								} else {
-									play.setVisibility(play.VISIBLE);
+									play.setVisibility(View.VISIBLE);
 								}
-
-								expand.setVisibility(expand.GONE);
-								inAppLogSL.setVisibility(inAppLogSL.GONE);
-								break;
+								expand.setVisibility(View.GONE);
+								inAppLogSL.setVisibility(View.GONE);
 							}
 						}
 					};
@@ -152,9 +137,9 @@ public class InAppLog extends Thread
 					pause.setOnClickListener(ocl);
 					collapse.setOnClickListener(ocl);
 					expand.setOnClickListener(ocl);
-					play.setVisibility(play.GONE);
-					expand.setVisibility(expand.GONE);
-					inAppLogSL.setVisibility(inAppLogSL.GONE);
+					play.setVisibility(View.GONE);
+					expand.setVisibility(View.GONE);
+					inAppLogSL.setVisibility(View.GONE);
 					playPause = true;
 					params = scroll.getLayoutParams();
 				}
@@ -183,7 +168,7 @@ public class InAppLog extends Thread
 
 						String current = inAppLog.getText().toString();
 						
-						//Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ Ñ‚Ð¾, Ñ‡Ñ‚Ð¾ Ð½Ðµ Ð¼Ð¾Ð³Ð»Ð¸ Ð²Ñ‹Ð²ÐµÑÑ‚Ð¸
+						//Äîáàâëÿåì òî, ÷òî íå ìîãëè âûâåñòè
 						if(logBuffer!=null && !logBuffer.isEmpty()){
 							current.concat(logBuffer);
 							logBuffer = "";
@@ -193,7 +178,7 @@ public class InAppLog extends Thread
 							
 							inAppLog.setText(toSet.concat("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
 						}else{
-							//append Ñ€Ð°Ð±Ð¾Ð°Ð²ÐµÑ‚ Ð±Ñ‹ÑÑ‚Ñ€ÐµÐµ, Ð½Ð¾ Ð¿Ñ€Ð¸ Ð¾Ð³Ñ€Ð¾Ð¼Ð½Ñ‹Ñ… ÑÑ‚Ñ€Ð¾Ñ‡ÐºÐ°Ñ… Ð´Ð°Ð¶Ðµ Ð¾Ð½ Ñ‚Ð¾Ñ€Ð¼Ð¾Ð·Ð¸Ñ‚, Ñ‚Ð°Ðº Ñ‡Ñ‚Ð¾ Ð²Ñ‹ÑˆÐµ Ð¼Ñ‹ Ð¿ÐµÑ€ÐµÐ¸Ð¾Ð´Ð¸Ñ‡ÐµÑÐºÐ¸ Ñ‡Ð¸ÑÑ‚Ð¸Ð¼ Ð¼ÐµÐ´Ð»ÐµÐ½Ð½Ñ‹Ð¼ ÑÐ¿Ð¾ÑÐ¾Ð±Ð¾Ð¼ 
+							//append ðàáîàâåò áûñòðåå, íî ïðè îãðîìíûõ ñòðî÷êàõ äàæå îí òîðìîçèò, òàê ÷òî âûøå ìû ïåðåèîäè÷åñêè ÷èñòèì ìåäëåííûì ñïîñîáîì 
 							inAppLog.append(new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
 						}	
 						scroll.post(new Runnable() {
@@ -204,13 +189,14 @@ public class InAppLog extends Thread
 						});
 						inAppLogSL.setText(time.concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
 					}else{
-						//Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ñ‚Ð¾, Ñ‡Ñ‚Ð¾ Ð½Ðµ Ð¼Ð¾Ð¶ÐµÐ¼ Ð²Ñ‹Ð²ÐµÑÑ‚Ð¸
+						//Ñîõðàíÿåì òî, ÷òî íå ìîæåì âûâåñòè
 						time = sdf.format(new Date(System.currentTimeMillis()));
 						if(logBuffer==null || logBuffer.isEmpty()){
 							logBuffer =  new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);
 						}
 						else{
-							logBuffer.concat(new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));			
+							logBuffer.concat("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);	
+							if(logBuffer.length()>30000)logBuffer= logBuffer.substring(logBuffer.length() - 10000);
 						}
 					}
 
@@ -221,13 +207,14 @@ public class InAppLog extends Thread
 			String tagToAdd = tag;
 			if(tagToAdd==null || tagToAdd.isEmpty())tagToAdd = TAG;
 			
-			//Ð¡Ð¾Ñ…Ñ€Ð°Ð½ÑÐµÐ¼ Ñ‚Ð¾, Ñ‡Ñ‚Ð¾ Ð½Ðµ Ð¼Ð¾Ð¶ÐµÐ¼ Ð²Ñ‹Ð²ÐµÑÑ‚Ð¸
+			//Ñîõðàíÿåì òî, ÷òî íå ìîæåì âûâåñòè
 			time = sdf.format(new Date(System.currentTimeMillis()));
 			if(logBuffer==null || logBuffer.isEmpty()){
 				logBuffer =  new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);
 			}
 			else{
-				logBuffer.concat(new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));			
+				logBuffer.concat("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);	
+				if(logBuffer.length()>30000)logBuffer= logBuffer.substring(logBuffer.length() - 10000);
 			}
 			Log.d(tag, str);
 		}
