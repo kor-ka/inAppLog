@@ -150,8 +150,11 @@ public class InAppLog extends Thread
 						//oops
 					}
 				}
-				v.addView(ial, new LayoutParams(LayoutParams.MATCH_PARENT,
-						LayoutParams.WRAP_CONTENT));
+				try{
+					v.addView(ial, new LayoutParams(LayoutParams.MATCH_PARENT,	LayoutParams.WRAP_CONTENT));
+				}catch(Exception e){
+					//oops
+				}
 
 				
 					
@@ -168,7 +171,7 @@ public class InAppLog extends Thread
 
 						String current = inAppLog.getText().toString();
 						
-						//Добавляем то, что не могли вывести
+						//Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГІГ®, Г·ГІГ® Г­ГҐ Г¬Г®ГЈГ«ГЁ ГўГ»ГўГҐГ±ГІГЁ
 						if(logBuffer!=null && !logBuffer.isEmpty()){
 							current.concat(logBuffer);
 							logBuffer = "";
@@ -178,7 +181,7 @@ public class InAppLog extends Thread
 							
 							inAppLog.setText(toSet.concat("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
 						}else{
-							//append рабоавет быстрее, но при огромных строчках даже он тормозит, так что выше мы переиодически чистим медленным способом 
+							//append Г°Г ГЎГ®Г ГўГҐГІ ГЎГ»Г±ГІГ°ГҐГҐ, Г­Г® ГЇГ°ГЁ Г®ГЈГ°Г®Г¬Г­Г»Гµ Г±ГІГ°Г®Г·ГЄГ Гµ Г¤Г Г¦ГҐ Г®Г­ ГІГ®Г°Г¬Г®Г§ГЁГІ, ГІГ ГЄ Г·ГІГ® ГўГ»ГёГҐ Г¬Г» ГЇГҐГ°ГҐГЁГ®Г¤ГЁГ·ГҐГ±ГЄГЁ Г·ГЁГ±ГІГЁГ¬ Г¬ГҐГ¤Г«ГҐГ­Г­Г»Г¬ Г±ГЇГ®Г±Г®ГЎГ®Г¬ 
 							inAppLog.append(new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
 						}	
 						scroll.post(new Runnable() {
@@ -189,7 +192,7 @@ public class InAppLog extends Thread
 						});
 						inAppLogSL.setText(time.concat(" | ").concat(tagToAdd).concat(" | ").concat(str));
 					}else{
-						//Сохраняем то, что не можем вывести
+						//Г‘Г®ГµГ°Г Г­ГїГҐГ¬ ГІГ®, Г·ГІГ® Г­ГҐ Г¬Г®Г¦ГҐГ¬ ГўГ»ГўГҐГ±ГІГЁ
 						time = sdf.format(new Date(System.currentTimeMillis()));
 						if(logBuffer==null || logBuffer.isEmpty()){
 							logBuffer =  new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);
@@ -207,7 +210,7 @@ public class InAppLog extends Thread
 			String tagToAdd = tag;
 			if(tagToAdd==null || tagToAdd.isEmpty())tagToAdd = TAG;
 			
-			//Сохраняем то, что не можем вывести
+			//Г‘Г®ГµГ°Г Г­ГїГҐГ¬ ГІГ®, Г·ГІГ® Г­ГҐ Г¬Г®Г¦ГҐГ¬ ГўГ»ГўГҐГ±ГІГЁ
 			time = sdf.format(new Date(System.currentTimeMillis()));
 			if(logBuffer==null || logBuffer.isEmpty()){
 				logBuffer =  new String("\n").concat(time).concat(" | ").concat(tagToAdd).concat(" | ").concat(str);
